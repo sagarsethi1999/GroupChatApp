@@ -13,12 +13,20 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
         .then(response => {
             if (response.status === 200) {
                 alert('Successfully logged in');
+                const token = response.data.token;
+                localStorage.setItem('authToken', token);
                 window.location.href = '../chat/chat.html';  
             }
         })
         .catch(error => {
             if (error.response) {
-                alert('Login failed: ' + error.response.data.message);
+                if (error.response.status === 404) {
+                    alert('User not found');
+                } else if (error.response.status === 401) {
+                    alert('User not authorized');
+                } else {
+                    alert('Login failed');
+                }
             } else {
                 console.error('Error:', error);
             }

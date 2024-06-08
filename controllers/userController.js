@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const User = require('../models/user');
+const jwt = require('jsonwebtoken');
 
 exports.signup = async (req, res) => {
     const { name, email, number, password } = req.body;
@@ -25,22 +26,33 @@ exports.signup = async (req, res) => {
 };
 
 
+const secretKey = process.env.SECRET_KEY;
+
+
 exports.login = async (req, res) => {
     const { email, password } = req.body;
 
     try {
+        
         const user = await User.findOne({ where: { email: email } });
         if (!user) {
-            return res.status(404).json({ message: 'User not found' });
+            console.log('User not found with email:', email);
+            return res.status(404).send('User not found');
         }
 
-        const match = await bcrypt.compare(password, user.password);
-        if (!match) {
-            return res.status(401).json({ message: 'Incorrect password' });
+        
+        const passwordMatch = await bcrypt.compare(password, user.password);
+        if (!passwordMatch) {
+            console.log('Incorrect password for user:', email);
+            return res.status(401).send('User not authorized');
         }
 
-        res.status(200).json({ message: 'Successfully logged in' });
+        
+        const token = jwt.sign({ id: user.id }, secretKey, { expiresIn: '1h' });
+
+        res.status(200).json({ token: token });
     } catch (error) {
-        res.status(500).json({ message: 'Internal server error' });
+        console.error('Error during login process:', error);
+        res.status(500).send('Internal server error');
     }
 };
