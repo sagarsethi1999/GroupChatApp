@@ -9,7 +9,13 @@ const User = require('./models/user');
 const app = express();
 const PORT = 3000;
 
-app.use(cors());
+const corsOptions = {
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    credentials: true
+};
+
+app.use(cors(corsOptions));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 

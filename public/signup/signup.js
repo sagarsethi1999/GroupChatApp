@@ -23,12 +23,17 @@ document.getElementById('signupForm').addEventListener('submit', function(event)
 
     axios.post('http://localhost:3000/user/signup', userData)
         .then(response => {
-          console.log( response.status === 200);
-          window.location.href = '../login/login.html';  
+            if (response.status === 200) {
+                alert(response.data.message);
+                window.location.href = '../login/login.html';  
+            }
         })
         .catch(error => {
-            console.error('Error:', error);
-            
+            if (error.response) {
+                alert(error.response.data.message);
+            } else {
+                console.error('Error:', error);
+            }
         });
 });
 
