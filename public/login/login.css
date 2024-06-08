@@ -8,7 +8,7 @@ body {
     background-color: #f4f4f4;
 }
 
-.signup-container {
+.login-container {
     background-color: #fff;
     padding: 20px;
     border-radius: 5px;
@@ -16,7 +16,7 @@ body {
     width: 300px;
 }
 
-.signup-container h2 {
+.login-container h2 {
     text-align: center;
     margin-bottom: 20px;
 }
@@ -58,10 +58,10 @@ body {
     background-color: #45a049;
 }
 
-#login-btn {
+#signup-btn {
     background-color: #008CBA;
 }
 
-#login-btn:hover {
+#signup-btn:hover {
     background-color: #007BB5;
 }

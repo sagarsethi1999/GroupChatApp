@@ -38,3 +38,6 @@ document.getElementById('signupForm').addEventListener('submit', function(event)
 });
 
 
+document.getElementById('login-btn').addEventListener('click', function() {
+    window.location.href = '../login/login.html';
+});
