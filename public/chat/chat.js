@@ -18,7 +18,7 @@ async function fetchMessages() {
         });
 
         const messages = response.data.messages;
-        messagesDiv.innerHTML = ''; // Clear previous messages
+        messagesDiv.innerHTML = '';
         messages.forEach(message => {
             const userName = message.user.name;
             const messageElement = document.createElement('div');
@@ -30,7 +30,7 @@ async function fetchMessages() {
     }
 }
 
-window.addEventListener('load', fetchMessages);
+setInterval(fetchMessages, 1000);
 
 async function sendMessage(message) {
     const token = localStorage.getItem('token');
