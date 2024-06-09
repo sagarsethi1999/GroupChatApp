@@ -14,7 +14,7 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
             if (response.status === 200) {
                 alert('Successfully logged in');
                 const token = response.data.token;
-                localStorage.setItem('authToken', token);
+                localStorage.setItem('token', token);
                 window.location.href = '../chat/chat.html';  
             }
         })

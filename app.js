@@ -2,8 +2,10 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const userRoutes = require('./routes/userRoutes');
+const chatRoutes = require('./routes/chatRoutes');
 const sequelize = require('./util/database');
-const User = require('./models/user'); 
+const User = require('./models/user');
+const Chat = require('./models/chat'); 
 
 const app = express();
 const PORT = 3000;
@@ -19,6 +21,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.use('/user', userRoutes);
+app.use('/chat', chatRoutes);
 
 sequelize
 .sync()

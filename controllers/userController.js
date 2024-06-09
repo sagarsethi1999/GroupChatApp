@@ -28,7 +28,7 @@ exports.signup = async (req, res) => {
 };
 
 
-const secretKey = process.env.SECRET_KEY;
+
 
 
 exports.login = async (req, res) => {
@@ -50,7 +50,7 @@ exports.login = async (req, res) => {
         }
 
         
-        const token = jwt.sign({ id: user.id }, secretKey, { expiresIn: '1h' });
+        const token = jwt.sign({ id: user.id }, 'secretKey');
 
         res.status(200).json({ token: token });
     } catch (error) {

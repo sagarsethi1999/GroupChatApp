@@ -3,19 +3,24 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 
-const secretKey = process.env.SECRET_KEY; 
 
+const verifyToken = (req, res, next) => {
+    console.log('Inside middleware');
+    const token = req.headers['authorization'];
+    if (!token) return res.status(401).send('Unauthorized');
 
-module.exports = (req, res, next) => {
-   
-    const token = req.headers.authorization;
-
-    jwt.verify(token, secretKey, (err, decodedToken) => {
+    jwt.verify(token, 'secretKey', (err, DecodedUser) => {
         if (err) {
-            return res.status(403).json({ message: 'Forbidden' });
+            console.error('Error verifying token:', err);
+            return res.status(403).send('Forbidden');
         }
-       
-        req.userId = decodedToken.userId;
+        console.log('Decoded user:', DecodedUser);
+        req.user = DecodedUser;
         next();
     });
 };
+
+
+
+module.exports = verifyToken;
+
