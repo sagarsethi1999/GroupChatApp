@@ -6,7 +6,7 @@ document.getElementById('signupForm').addEventListener('submit', function(event)
     var number = document.getElementById('number').value;
     var password = document.getElementById('password').value;
 
-    var passwordRegex = /^(?=.*\d).{8,}$/;
+    var passwordRegex = /^(?=.*\d).{2,}$/;//password length ihave changed
 
     if (!passwordRegex.test(password)) {
         alert('Password must be at least 8 characters long and contain at least one numeric value.');

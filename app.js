@@ -3,9 +3,19 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const userRoutes = require('./routes/userRoutes');
 const chatRoutes = require('./routes/chatRoutes');
+const groupRoutes = require('./routes/groupRoutes');
+
+// const sequelize = require('./util/database');
+// const User = require('./models/user');
+// const Chat = require('./models/chat'); 
+
+
 const sequelize = require('./util/database');
 const User = require('./models/user');
-const Chat = require('./models/chat'); 
+const Group = require('./models/group');
+const UserGroup = require('./models/userGroup');
+const Chat = require('./models/chat');
+
 
 const app = express();
 const PORT = 3000;
@@ -22,6 +32,17 @@ app.use(bodyParser.json());
 
 app.use('/user', userRoutes);
 app.use('/chat', chatRoutes);
+app.use('/groups', groupRoutes);
+
+
+User.belongsToMany(Group, { through: UserGroup });
+Group.belongsToMany(User, { through: UserGroup });
+User.hasMany(Chat, { foreignKey: 'userId' });
+Chat.belongsTo(User, { foreignKey: 'userId' });
+Group.hasMany(Chat, { foreignKey: 'groupId' });
+Chat.belongsTo(Group, { foreignKey: 'groupId' });
+
+
 
 sequelize
 .sync()
@@ -35,3 +56,8 @@ sequelize
     .catch(err => {
         console.error('Unable to create the database:', err);
     });
+
+
+
+
+

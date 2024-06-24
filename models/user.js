@@ -31,9 +31,13 @@ const User = sequelize.define('user', {
    
 });
 
+
+
+
 User.prototype.validPassword = async function(password) {
     return await bcrypt.compare(password, this.password);
 };
+
 
 
 module.exports = User;

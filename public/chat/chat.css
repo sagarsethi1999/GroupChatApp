@@ -1,49 +1,168 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
+/* chat.css */
+
+/* Container */
+.container {
+    display: flex;
+    height: 100vh;
 }
 
-.chat-container {
-    max-width: 600px;
-    margin: 20px auto;
+/* Sidebar */
+.sidebar {
+    flex: 1;
+    background-color: #f8f9fa;
     padding: 20px;
+    border-right: 1px solid #e9ecef;
+}
+
+/* Group Actions */
+.group-actions {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.group-actions .action-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    margin: 0 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.group-actions .action-button:hover {
+    background-color: #0056b3;
+}
+
+/* Group Forms */
+.group-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.group-form input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    background-color: #f9f9f9;
+    box-sizing: border-box;
 }
 
-#chat-messages {
-    margin-bottom: 20px;
-    height: 300px;
-    overflow-y: auto;
-    border: 1px solid #ccc;
+.group-form .submit-button {
+    width: 100%;
     padding: 10px;
-    background-color: #fff;
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
+.group-form .submit-button:hover {
+    background-color: #218838;
+}
+
+/* Groups List */
+.groups-list {
+    margin-top: 20px;
+}
+
+.groups-list div {
+    padding: 10px;
+    border-bottom: 1px solid #e9ecef;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.groups-list div:hover {
+    background-color: #f1f1f1;
+}
+
+/* Chat Container */
+.chat-container {
+    flex: 3;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+/* Group Info */
+.group-info {
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.group-name {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.group-members {
+    font-size: 16px;
+    color: #6c757d;
+}
+
+/* Chat Messages */
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: 20px;
+}
+
+.chat-messages div {
+    margin-bottom: 10px;
+}
+
+/* Input Container */
 .input-container {
     display: flex;
-    align-items: center;
 }
 
 .input-container input[type="text"] {
     flex: 1;
-    padding: 8px;
+    padding: 10px;
     border: 1px solid #ccc;
-    border-radius: 3px;
+    border-radius: 5px;
 }
 
 .input-container button {
+    padding: 10px 20px;
     margin-left: 10px;
-    padding: 8px 15px;
     background-color: #007bff;
     color: #fff;
     border: none;
-    border-radius: 3px;
+    border-radius: 5px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 .input-container button:hover {
     background-color: #0056b3;
 }
+
+/* Logout Button */
+#logoutButton {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#logoutButton:hover {
+    background-color: #c82333;
+}
+
+
+  

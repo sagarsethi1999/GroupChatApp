@@ -1,7 +1,7 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = require('../util/database');
 const User = require('./user');
-
+const Group = require('./group');
 
 const Chat = sequelize.define('Chat', {
     id: {
@@ -10,6 +10,10 @@ const Chat = sequelize.define('Chat', {
         primaryKey: true
     },
     userId: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
+    groupId: { // Add the groupId field
         type: DataTypes.INTEGER,
         allowNull: false
     },
@@ -26,5 +30,8 @@ const Chat = sequelize.define('Chat', {
 
 User.hasMany(Chat, { foreignKey: 'userId' });
 Chat.belongsTo(User, { foreignKey: 'userId' });
+Group.hasMany(Chat, { foreignKey: 'groupId' });
+Chat.belongsTo(Group, { foreignKey: 'groupId' });
 
 module.exports = Chat;
+
