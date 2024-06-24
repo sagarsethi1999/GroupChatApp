@@ -1,8 +1,12 @@
 const bcrypt = require('bcrypt');
 const User = require('../models/user');
+const Group = require('../models/group');
+const UserGroup = require('../models/userGroup');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 dotenv.config();
+
+
 
 exports.signup = async (req, res) => {
     const { name, email, number, password } = req.body;
@@ -56,5 +60,37 @@ exports.login = async (req, res) => {
     } catch (error) {
         console.error('Error during login process:', error);
         res.status(500).send('Internal server error');
+    }
+};
+
+
+exports.getCurrentUser = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const groupName = req.query.groupName;
+
+        const user = await User.findByPk(userId);
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        const group = await Group.findOne({ where: { name: groupName } });
+        if (!group) {
+            return res.status(404).json({ error: 'Group not found' });
+        }
+
+        const userGroup = await UserGroup.findOne({
+            where: {
+                userId: user.id,
+                groupId: group.id
+            }
+        });
+
+        const role = userGroup ? userGroup.role : 'member';
+
+        res.status(200).json({ user, role });
+    } catch (error) {
+        console.error('Error fetching current user:', error);
+        res.status(500).json({ error: 'Internal server error' });
     }
 };

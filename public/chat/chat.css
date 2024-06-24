@@ -164,5 +164,16 @@
     background-color: #c82333;
 }
 
+.group-info-button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.group-info-button:hover {
+    background-color: #2980b9;
+}
 
   

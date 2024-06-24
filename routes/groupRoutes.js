@@ -7,5 +7,8 @@ router.post('/', verifyToken, groupController.createGroup);
 router.post('/join', verifyToken, groupController.joinGroup);
 router.get('/', verifyToken, groupController.getGroups);
 router.get('/members', verifyToken, groupController.getGroupMembers);
+router.post('/addMember', verifyToken, groupController.addGroupMember);
+router.post('/removeMember', verifyToken, groupController.removeGroupMember);
+router.post('/makeAdmin', verifyToken, groupController.makeAdmin);
 
 module.exports = router;

@@ -9,6 +9,11 @@ const UserGroup = sequelize.define('userGroup', {
         autoIncrement: true,
         allowNull: false,
         primaryKey: true
+    },
+    role: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        defaultValue: 'member' // Default role is member
     }
 });
 

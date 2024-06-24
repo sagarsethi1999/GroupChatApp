@@ -127,6 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const submitJoinGroupButton = document.getElementById('submitJoinGroupButton');
     const groupsList = document.getElementById('groupsList');
     const groupNameDiv = document.getElementById('groupName');
+    const groupInfoButton = document.getElementById('groupInfoButton');
     const groupMembers = document.getElementById('groupMembers');
     const chatMessagesDiv = document.getElementById('chat-messages');
     const messageInput = document.getElementById('messageInput');
@@ -198,6 +199,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    groupInfoButton.addEventListener('click', () => {
+        if (selectedGroupName) {
+            localStorage.setItem('selectedGroupName', selectedGroupName);
+            window.location.href = '../groupinfo/groupinfo.html';
+        } else {
+            alert('Please select a group first');
+        }
+    });
+
     const loadGroups = async () => {
         try {
             const response = await axios.get('http://localhost:3000/groups', {
@@ -209,10 +219,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 groupElement.textContent = group.name;
                 groupElement.addEventListener('click', () => {
                     selectedGroupName = group.name;
-                    groupNameDiv.textContent = group.name;
+                    groupNameDiv.firstChild.textContent = group.name;
+                    document.getElementById('groupInfoButton').style.display = 'inline-block';
                     loadGroupMembers(group.name);
                     loadMessages(group.name);
+                    console.log(groupNameDiv);
+                    console.log(groupInfoButton);
+
+
                 });
+             
+
                 groupsList.appendChild(groupElement);
             });
         } catch (error) {
@@ -228,7 +245,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             console.log(response.data.members);
             groupMembers.innerHTML = '';
-            const memberNames = response.data.members.join(', ');
+            const memberNames = response.data.members.map(member => `${member.name} (${member.role})`).join(', ');
             const memberElement = document.createElement('div');
             memberElement.textContent = memberNames;
             groupMembers.appendChild(memberElement);
