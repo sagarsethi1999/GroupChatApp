@@ -299,4 +299,10 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.removeItem('token');
         window.location.href = '../login/login.html';
     });
+
+    setInterval(() => {
+        if (selectedGroupName) {
+            loadMessages(selectedGroupName);
+        }
+    }, 1000);
 });
