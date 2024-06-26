@@ -1,6 +1,6 @@
 
 
-// const apiUrl = 'http://localhost:3000';
+// const apiUrl = 'http://3.27.216.215:3000';
 
 // const messagesDiv = document.getElementById('chat-messages');
 // const messageInput = document.getElementById('messageInput');
@@ -154,7 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const groupPassword = document.getElementById('groupPasswordInput').value;
 
         try {
-            await axios.post('http://localhost:3000/groups', { name: groupName, password: groupPassword }, {
+            await axios.post('http://3.27.216.215:3000/groups', { name: groupName, password: groupPassword }, {
                 headers: { 'Authorization': token }
             });
             alert('Group created successfully');
@@ -171,7 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const groupPassword = document.getElementById('joinGroupPasswordInput').value;
 
         try {
-            await axios.post('http://localhost:3000/groups/join', { name: groupName, password: groupPassword }, {
+            await axios.post('http://3.27.216.215:3000/groups/join', { name: groupName, password: groupPassword }, {
                 headers: { 'Authorization': token }
             });
             alert('Joined group successfully');
@@ -188,7 +188,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!message || !selectedGroupName) return;
 
         try {
-            await axios.post('http://localhost:3000/chat/send', { message, groupName: selectedGroupName }, {
+            await axios.post('http://3.27.216.215:3000/chat/send', { message, groupName: selectedGroupName }, {
                 headers: { 'Authorization': token }
             });
             messageInput.value = '';
@@ -210,7 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const loadGroups = async () => {
         try {
-            const response = await axios.get('http://localhost:3000/groups', {
+            const response = await axios.get('http://3.27.216.215:3000/groups', {
                 headers: { 'Authorization': token }
             });
             groupsList.innerHTML = '';
@@ -240,7 +240,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const loadGroupMembers = async (groupName) => {
         try {
-            const response = await axios.get(`http://localhost:3000/groups/members?groupName=${groupName}`, {
+            const response = await axios.get(`http://3.27.216.215:3000/groups/members?groupName=${groupName}`, {
                 headers: { 'Authorization': token }
             });
             console.log(response.data.members);
@@ -258,7 +258,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const loadMessages = async (groupName) => {
         try {
-            const response = await axios.get(`http://localhost:3000/chat/messages?groupName=${groupName}`, {
+            const response = await axios.get(`http://3.27.216.215:3000/chat/messages?groupName=${groupName}`, {
                 headers: { 'Authorization': token }
             });
             chatMessagesDiv.innerHTML = '';

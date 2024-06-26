@@ -58,7 +58,7 @@ sequelize
     .then(() => {
         console.log('Database & tables created!');
         app.listen(PORT, () => {
-            console.log(`Server is running on http://localhost:${PORT}`);
+            console.log(`Server is running on http://3.27.216.215:${PORT}`);
         });
     })
     .catch(err => {

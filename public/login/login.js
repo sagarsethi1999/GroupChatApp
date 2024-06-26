@@ -9,7 +9,7 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
         password: password
     };
 
-    axios.post('http://localhost:3000/user/login', userData)
+    axios.post('http://3.27.216.215:3000/user/login', userData)
         .then(response => {
             if (response.status === 200) {
                 alert('Successfully logged in');

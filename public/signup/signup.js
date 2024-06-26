@@ -21,7 +21,7 @@ document.getElementById('signupForm').addEventListener('submit', function(event)
     };
 
 
-    axios.post('http://localhost:3000/user/signup', userData)
+    axios.post('http://3.27.216.215:3000/user/signup', userData)
         .then(response => {
             if (response.status === 200) {
                 alert(response.data.message);
