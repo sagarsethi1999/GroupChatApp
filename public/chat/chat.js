@@ -304,5 +304,5 @@ document.addEventListener('DOMContentLoaded', () => {
         if (selectedGroupName) {
             loadMessages(selectedGroupName);
         }
-    }, 1000);
+    }, 5000);
 });

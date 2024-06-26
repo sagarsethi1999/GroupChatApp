@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const path = require('path');
 const cors = require('cors');
 const userRoutes = require('./routes/userRoutes');
 const chatRoutes = require('./routes/chatRoutes');
@@ -34,6 +35,12 @@ app.use('/user', userRoutes);
 app.use('/chat', chatRoutes);
 app.use('/groups', groupRoutes);
 
+app.use((req, res) => {
+    console.log(`url`, req.url);
+    console.log('fully automated');
+    res.sendFile(path.join(__dirname,`public/${req.url}`))
+  })
+
 
 User.belongsToMany(Group, { through: UserGroup });
 Group.belongsToMany(User, { through: UserGroup });
@@ -41,6 +48,7 @@ User.hasMany(Chat, { foreignKey: 'userId' });
 Chat.belongsTo(User, { foreignKey: 'userId' });
 Group.hasMany(Chat, { foreignKey: 'groupId' });
 Chat.belongsTo(Group, { foreignKey: 'groupId' });
+
 
 
 
