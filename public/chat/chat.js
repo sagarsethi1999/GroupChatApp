@@ -1,123 +1,3 @@
-
-
-// const apiUrl = 'http://3.27.216.215:3000';
-
-// const messagesDiv = document.getElementById('chat-messages');
-// const messageInput = document.getElementById('messageInput');
-// const sendButton = document.getElementById('sendButton');
-// const logoutButton = document.getElementById('logoutButton');
-
-
-
-
-// function storeMessage(message) {
-//     let messages = JSON.parse(localStorage.getItem('messages')) || [];
-//     messages.push(message);
-//     if (messages.length > 10) {
-//         messages.shift();
-//     }
-//     localStorage.setItem('messages', JSON.stringify(messages));
-// }
-
-// function getStoredMessages() {
-//     return JSON.parse(localStorage.getItem('messages')) || [];
-// }
-
-// async function fetchNewMessages() {
-//     const token = localStorage.getItem('token');
-//     if (!token) {
-//         console.log('Token not found');
-//         return;
-//     }
-
-//     try {
-//         const storedMessages = getStoredMessages();
-//         const lastMessageId = storedMessages.length > 0 ? storedMessages[storedMessages.length - 1].id : null;
-
-//         const response = await axios.get(`${apiUrl}/chat/messages`, {
-//             headers: { 'Authorization': token },
-//             params: { lastMessageId: lastMessageId }
-//         });
-
-//         const newMessages = response.data.messages;
-//         if (newMessages.length > 0) {
-//             newMessages.forEach(message => {
-//                 storeMessage(message);
-//             });
-//             displayMessages(newMessages);
-//         }
-//     } catch (error) {
-//         console.error('Error fetching messages:', error);
-//     }
-// }
-
-// function displayMessages(messages) {
-//     const messagesDiv = document.getElementById('chat-messages');
-//     messagesDiv.innerHTML = '';
-//     messages.forEach(message => {
-//         const messageElement = document.createElement('div');
-//         const userName = message.name ? message.name : 'Unknown';
-//         messageElement.textContent = `${userName}: ${message.message}`;
-//         messagesDiv.appendChild(messageElement);
-//     });
-// }
-
-// async function loadMessages() {
-//     const storedMessages = getStoredMessages();
-//     displayMessages(storedMessages);
-//     await fetchNewMessages();
-// }
-
-// loadMessages(); 
-
-// setInterval(fetchNewMessages, 1000);
-
-
-
-
-
-
-
-
-
-
-
-// async function sendMessage(message) {
-//     const token = localStorage.getItem('token');
-//     if (!token) {
-//         console.log('Token not found');
-//         window.location.href = '../login/login.html';
-//         return;
-//     }
-
-//     try {
-//         await axios.post(`${apiUrl}/chat/send-message`, { message }, {
-//             headers: { 'Authorization': token }
-//         });
-//         console.log('Message sent successfully');
-//     } catch (error) {
-//         console.error('Error sending message:', error);
-//     }
-// }
-
-// sendButton.addEventListener('click', () => {
-//     const message = messageInput.value.trim();
-//     if (message) {
-//         sendMessage(message);
-//         messageInput.value = '';
-//     }
-// });
-
-// logoutButton.addEventListener('click', () => {
-//     localStorage.removeItem('token');
-//     window.location.href = '../login/login.html';
-// });
-
-
-
-
-//above codes are for single chat
-//--------------------------------------------------------------------------------------------------------------------------------//
 document.addEventListener('DOMContentLoaded', () => {
     const createGroupButton = document.getElementById('createGroupButton');
     const joinGroupButton = document.getElementById('joinGroupButton');
@@ -134,10 +14,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const sendButton = document.getElementById('sendButton');
     const logoutButton = document.getElementById('logoutButton');
 
-
+    const socket = io('http://localhost:3000');
     let selectedGroupName = null;
-
+    let currentGroupName = null;
     const token = localStorage.getItem('token');
+    const name = localStorage.getItem('username');
+
+    function appendMessage(message) {
+        const messageElement = document.createElement('div');
+        messageElement.innerText = message;
+        chatMessagesDiv.append(messageElement);
+    }
 
     createGroupButton.addEventListener('click', () => {
         createGroupForm.style.display = 'block';
@@ -154,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const groupPassword = document.getElementById('groupPasswordInput').value;
 
         try {
-            await axios.post('http://3.27.216.215:3000/groups', { name: groupName, password: groupPassword }, {
+            await axios.post('http://localhost:3000/groups', { name: groupName, password: groupPassword }, {
                 headers: { 'Authorization': token }
             });
             alert('Group created successfully');
@@ -171,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const groupPassword = document.getElementById('joinGroupPasswordInput').value;
 
         try {
-            await axios.post('http://3.27.216.215:3000/groups/join', { name: groupName, password: groupPassword }, {
+            await axios.post('http://localhost:3000/groups/join', { name: groupName, password: groupPassword }, {
                 headers: { 'Authorization': token }
             });
             alert('Joined group successfully');
@@ -187,12 +74,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const message = messageInput.value;
         if (!message || !selectedGroupName) return;
 
+        const messageElement = document.createElement('div');
+        messageElement.innerText = `${name}: ${message}`;
+        chatMessagesDiv.append(messageElement);
+
+        socket.emit('send-chat-message', { message, name},selectedGroupName );
+        messageInput.value = '';
+
         try {
-            await axios.post('http://3.27.216.215:3000/chat/send', { message, groupName: selectedGroupName }, {
+            await axios.post('http://localhost:3000/chat/send', { message, groupName: selectedGroupName }, {
                 headers: { 'Authorization': token }
             });
             messageInput.value = '';
-            loadMessages(selectedGroupName);
         } catch (error) {
             console.error('Error sending message:', error);
             alert('Failed to send message');
@@ -210,26 +103,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const loadGroups = async () => {
         try {
-            const response = await axios.get('http://3.27.216.215:3000/groups', {
+            const response = await axios.get('http://localhost:3000/groups', {
                 headers: { 'Authorization': token }
             });
+
+
             groupsList.innerHTML = '';
             response.data.groups.forEach(group => {
+                console.log(group.name)
                 const groupElement = document.createElement('div');
                 groupElement.textContent = group.name;
                 groupElement.addEventListener('click', () => {
                     selectedGroupName = group.name;
-                    groupNameDiv.firstChild.textContent = group.name;
+                    groupNameDiv.textContent = group.name;
                     document.getElementById('groupInfoButton').style.display = 'inline-block';
                     loadGroupMembers(group.name);
                     loadMessages(group.name);
-                    console.log(groupNameDiv);
-                    console.log(groupInfoButton);
-
 
                 });
-             
-
                 groupsList.appendChild(groupElement);
             });
         } catch (error) {
@@ -240,16 +131,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const loadGroupMembers = async (groupName) => {
         try {
-            const response = await axios.get(`http://3.27.216.215:3000/groups/members?groupName=${groupName}`, {
+            const response = await axios.get(`http://localhost:3000/groups/members?groupName=${groupName}`, {
                 headers: { 'Authorization': token }
             });
-            console.log(response.data.members);
             groupMembers.innerHTML = '';
             const memberNames = response.data.members.map(member => `${member.name} (${member.role})`).join(', ');
             const memberElement = document.createElement('div');
             memberElement.textContent = memberNames;
             groupMembers.appendChild(memberElement);
-           
         } catch (error) {
             console.error('Error loading group members:', error);
             alert('Failed to load group members');
@@ -258,12 +147,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const loadMessages = async (groupName) => {
         try {
-            const response = await axios.get(`http://3.27.216.215:3000/chat/messages?groupName=${groupName}`, {
+            const response = await axios.get(`http://localhost:3000/chat/messages?groupName=${groupName}`, {
                 headers: { 'Authorization': token }
             });
             chatMessagesDiv.innerHTML = '';
             response.data.messages.forEach(message => {
-                console.log(message);
                 const messageElement = document.createElement('div');
                 messageElement.textContent = `${message.user.name}: ${message.message}`;
                 chatMessagesDiv.appendChild(messageElement);
@@ -274,35 +162,73 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-
-
-    const selectGroup = (groupName) => {
-        groupNameDiv.textContent = groupName;
-        loadMessages(groupName);
-    };
-
-
     const GroupsList = document.getElementById('groupsList');
+
     GroupsList.addEventListener('click', (event) => {
         if (event.target.tagName === 'DIV') {
             const groupName = event.target.textContent;
-            selectGroup(groupName);
+
+            if (currentGroupName  !== groupName) {
+               
+                socket.emit('leave-group', { groupName: currentGroupName, name });
+                
+            }
+
+            selectedGroupName = groupName;
+            
+
+            groupNameDiv.textContent = groupName;
+            console.log('selected group name is ', selectedGroupName)
+            document.getElementById('groupInfoButton').style.display = 'inline-block';
+            loadGroupMembers(groupName);
+            loadMessages(groupName);
+
+            if(selectedGroupName !== currentGroupName){
+                socket.emit('join-group', {groupName:selectedGroupName, name});
+                currentGroupName = groupName;
+            }
+            
+
+            
+            
+
         }
-
     });
-
-
 
     loadGroups();
 
     logoutButton.addEventListener('click', () => {
         localStorage.removeItem('token');
+        localStorage.removeItem('username');
         window.location.href = '../login/login.html';
     });
 
-    setInterval(() => {
-        if (selectedGroupName) {
-            loadMessages(selectedGroupName);
-        }
-    }, 5000);
+    socket.emit('new-user', name);
+
+    socket.on('chat-message', (data) => {
+        const messageElement = document.createElement('div');
+        messageElement.innerText = `${data.name}: ${data.message}`;
+        chatMessagesDiv.append(messageElement);
+    });
+
+    socket.on('user-connected', (name) => {
+        const messageElement = document.createElement('div');
+        messageElement.innerText = `${name} is online`;
+        messageElement.style.color = 'limegreen';
+        messageElement.style.fontWeight = 'bold';
+        chatMessagesDiv.append(messageElement);
+    });
+
+    socket.on('user-disconnected', (name) => {
+        const messageElement = document.createElement('div');
+        messageElement.innerText = `${name} went offline`;
+        messageElement.style.color = 'red';
+        messageElement.style.fontWeight = 'bold';
+        chatMessagesDiv.append(messageElement);
+    });
+
+    
 });
+
+
+

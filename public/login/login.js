@@ -9,12 +9,14 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
         password: password
     };
 
-    axios.post('http://3.27.216.215:3000/user/login', userData)
+    axios.post('http://localhost:3000/user/login', userData)
         .then(response => {
             if (response.status === 200) {
                 alert('Successfully logged in');
                 const token = response.data.token;
+                const username = response.data.name;
                 localStorage.setItem('token', token);
+                localStorage.setItem('username', username);
                 window.location.href = '../chat/chat.html';  
             }
         })

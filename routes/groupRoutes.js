@@ -10,5 +10,6 @@ router.get('/members', verifyToken, groupController.getGroupMembers);
 router.post('/addMember', verifyToken, groupController.addGroupMember);
 router.post('/removeMember', verifyToken, groupController.removeGroupMember);
 router.post('/makeAdmin', verifyToken, groupController.makeAdmin);
+router.delete('/:groupName', verifyToken, groupController.deleteGroup);
 
 module.exports = router;

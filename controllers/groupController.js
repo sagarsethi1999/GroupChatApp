@@ -1,6 +1,7 @@
 const Group = require('../models/group');
 const UserGroup = require('../models/userGroup');
 const User = require('../models/user');
+const Chat = require('../models/chat');
 const { Op } = require('sequelize');
 
 exports.getGroups = async (req, res) => {
@@ -157,3 +158,37 @@ exports.makeAdmin = async (req, res) => {
         res.status(500).json({ message: 'Failed to make admin' });
     }
 };
+
+
+exports.deleteGroup = async (req, res) => {
+    const { groupName } = req.params;
+
+    try {
+        const group = await Group.findOne({
+            where: {
+                name: groupName
+            }
+        });
+
+        if (!group) {
+            return res.status(404).json({ error: 'Group not found' });
+        }
+        await Chat.destroy({
+            where: {
+                groupId: group.id
+            }
+        });
+
+        await UserGroup.destroy({
+            where: { groupId: group.id }
+        });
+
+        await group.destroy();
+
+        res.status(200).json({ message: 'Group and associated chats deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting group:', error);
+        res.status(500).json({ error: 'Failed to delete group and associated chats' });
+    }
+};
+

@@ -13,7 +13,7 @@ const Chat = sequelize.define('Chat', {
         type: DataTypes.INTEGER,
         allowNull: false
     },
-    groupId: { // Add the groupId field
+    groupId: { 
         type: DataTypes.INTEGER,
         allowNull: false
     },
