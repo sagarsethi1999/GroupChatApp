@@ -13,6 +13,7 @@ const User = require('./models/user');
 const Group = require('./models/group');
 const UserGroup = require('./models/userGroup');
 const Chat = require('./models/chat');
+const ArchivedChat = require('./models/ArchivedChat');
 
 const app = express();
 const server = http.createServer(app);
@@ -60,7 +61,7 @@ sequelize
     .then(() => {
         console.log('Database & tables created!');
         server.listen(PORT, () => {
-            console.log(`Server is running on http://localhost:${PORT}`);
+            console.log(`Server is running on http://3.27.216.215:${PORT}`);
         });
     })
     .catch(err => {

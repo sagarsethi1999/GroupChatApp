@@ -77,6 +77,8 @@
     border-bottom: 1px solid #e9ecef;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    font-size: 30px;
+    font-weight: bold;
 }
 
 .groups-list div:hover {
@@ -98,9 +100,10 @@
 }
 
 .group-name {
-    font-size: 24px;
+    font-size: 30px;
     font-weight: bold;
     margin-bottom: 10px;
+    
 }
 
 .group-members {
@@ -177,3 +180,11 @@
 }
 
   
+.username {
+    position: absolute;
+    top: 20px;
+    right: 150px;
+    color: #333;
+    font-weight: bold;
+    font-size: 25px;
+}

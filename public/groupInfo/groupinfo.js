@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const backButton = document.getElementById('backButton');
     const deleteGroupButton = document.getElementById('deleteGroupButton'); 
     const adminActions = document.getElementById('adminActions');
+    const deleteActions = document.getElementById('deleteActions');
 
     const token = localStorage.getItem('token');
     const selectedGroupName = localStorage.getItem('selectedGroupName');
@@ -25,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const loadGroupMembers = async () => {
         try {
-            const response = await axios.get(`http://localhost:3000/groups/members?groupName=${selectedGroupName}`, {
+            const response = await axios.get(`http://3.27.216.215:3000/groups/members?groupName=${selectedGroupName}`, {
                 headers: { 'Authorization': token }
             });
             groupMembersElement.innerHTML = '';
@@ -35,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 groupMembersElement.appendChild(memberElement);
             });
 
-            const currentUserResponse = await axios.get(`http://localhost:3000/user/me?groupName=${selectedGroupName}`, {
+            const currentUserResponse = await axios.get(`http://3.27.216.215:3000/user/me?groupName=${selectedGroupName}`, {
                 headers: { 'Authorization': token }
             });
             const currentUser = currentUserResponse.data.user;
@@ -43,6 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (currentUserRole === 'admin') {
                 adminActions.style.display = 'block';
+                deleteActions.style.display = 'block';
             }
         } catch (error) {
             console.error('Error loading group members:', error);
@@ -55,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!memberIdentifier) return;
 
         try {
-            await axios.post('http://localhost:3000/groups/addMember', {
+            await axios.post('http://3.27.216.215:3000/groups/addMember', {
                 groupName: selectedGroupName,
                 memberIdentifier
             }, {
@@ -74,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!memberName) return;
 
         try {
-            await axios.post('http://localhost:3000/groups/removeMember', {
+            await axios.post('http://3.27.216.215:3000/groups/removeMember', {
                 groupName: selectedGroupName,
                 memberName
             }, {
@@ -93,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!memberName) return;
 
         try {
-            await axios.post('http://localhost:3000/groups/makeAdmin', {
+            await axios.post('http://3.27.216.215:3000/groups/makeAdmin', {
                 groupName: selectedGroupName,
                 memberName
             }, {
@@ -112,7 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!confirm('Are you sure you want to clear the chat?')) return;
 
         try {
-            await axios.post('http://localhost:3000/chat/clear', {
+            await axios.post('http://3.27.216.215:3000/chat/clear', {
                 groupName: selectedGroupName
             }, {
                 headers: { 'Authorization': token }
@@ -132,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const deleteGroup = async () => {
         try {
-            const response = await axios.delete(`http://localhost:3000/groups/${selectedGroupName}`, {
+            const response = await axios.delete(`http://3.27.216.215:3000/groups/${selectedGroupName}`, {
                 headers: { 'Authorization': token }
             });
             alert('Group deleted successfully');

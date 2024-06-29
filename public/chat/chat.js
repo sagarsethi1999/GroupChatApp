@@ -13,8 +13,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const messageInput = document.getElementById('messageInput');
     const sendButton = document.getElementById('sendButton');
     const logoutButton = document.getElementById('logoutButton');
+    const usernameDiv = document.getElementById('usernameDiv');
 
-    const socket = io('http://localhost:3000');
+    const socket = io('http://3.27.216.215:3000');
     let selectedGroupName = null;
     let currentGroupName = null;
     const token = localStorage.getItem('token');
@@ -41,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const groupPassword = document.getElementById('groupPasswordInput').value;
 
         try {
-            await axios.post('http://localhost:3000/groups', { name: groupName, password: groupPassword }, {
+            await axios.post('http://3.27.216.215:3000/groups', { name: groupName, password: groupPassword }, {
                 headers: { 'Authorization': token }
             });
             alert('Group created successfully');
@@ -58,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const groupPassword = document.getElementById('joinGroupPasswordInput').value;
 
         try {
-            await axios.post('http://localhost:3000/groups/join', { name: groupName, password: groupPassword }, {
+            await axios.post('http://3.27.216.215:3000/groups/join', { name: groupName, password: groupPassword }, {
                 headers: { 'Authorization': token }
             });
             alert('Joined group successfully');
@@ -82,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
         messageInput.value = '';
 
         try {
-            await axios.post('http://localhost:3000/chat/send', { message, groupName: selectedGroupName }, {
+            await axios.post('http://3.27.216.215:3000/chat/send', { message, groupName: selectedGroupName }, {
                 headers: { 'Authorization': token }
             });
             messageInput.value = '';
@@ -103,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const loadGroups = async () => {
         try {
-            const response = await axios.get('http://localhost:3000/groups', {
+            const response = await axios.get('http://3.27.216.215:3000/groups', {
                 headers: { 'Authorization': token }
             });
 
@@ -131,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const loadGroupMembers = async (groupName) => {
         try {
-            const response = await axios.get(`http://localhost:3000/groups/members?groupName=${groupName}`, {
+            const response = await axios.get(`http://3.27.216.215:3000/groups/members?groupName=${groupName}`, {
                 headers: { 'Authorization': token }
             });
             groupMembers.innerHTML = '';
@@ -147,7 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const loadMessages = async (groupName) => {
         try {
-            const response = await axios.get(`http://localhost:3000/chat/messages?groupName=${groupName}`, {
+            const response = await axios.get(`http://3.27.216.215:3000/chat/messages?groupName=${groupName}`, {
                 headers: { 'Authorization': token }
             });
             chatMessagesDiv.innerHTML = '';
@@ -228,6 +229,20 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     
+
+    
+
+    
+    const loadUsername = () => {
+        const username = localStorage.getItem('username');
+        if (username) {
+            const firstName = username.split(' ')[0]; 
+            usernameDiv.textContent = `Hello ${firstName}...`;
+        }
+    };
+
+    loadUsername();
+
 });
 
 
